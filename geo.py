@@ -38,12 +38,20 @@ for feature in geojson_data['features']:
     wadmkk = feature['properties']['WADMKK']
     wadmpr = feature['properties']['WADMPR']
     luas = feature['properties']['luas']
-    coordinates = json.dumps(feature['geometry']['coordinates'])
+    coordinates = feature['geometry']['coordinates']
     
+    template = {
+        'type' : 'Polygon',
+        'geometry' : {
+            'type' : 'Polygon',
+            'coordinates' : coordinates
+        }
+    }
+
     cur.execute("""
         INSERT INTO desa_kel_yd (objectid, namobj, kdcpum, wadmkc, wadmkd, wadmkk, wadmpr, luas, coordinates)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-    """, (objectid, namobj, kdcpum, wadmkc, wadmkd, wadmkk, wadmpr, luas, coordinates))
+    """, (objectid, namobj, kdcpum, wadmkc, wadmkd, wadmkk, wadmpr, luas, json.dumps(template)))
     
 conn.commit()
 
