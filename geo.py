@@ -16,17 +16,17 @@ cur = conn.cursor()
 
 cur.execute("""
     CREATE TABLE desa_kel_yd (
-        objectid VARCHAR PRIMARY KEY,
+        objectid INT PRIMARY KEY,
         namobj VARCHAR,
         kdcpum VARCHAR,
         wadmkc VARCHAR,
         wadmkd VARCHAR,
         wadmkk VARCHAR,
         wadmpr VARCHAR,
-        luas NUMERIC,
-        coordinates JSONB
+        luas DOUBLE PRECISION,
+        coordinates JSON
     )
-""")
+ """)
 conn.commit()
 
 for feature in geojson_data['features']:
@@ -39,11 +39,10 @@ for feature in geojson_data['features']:
     wadmpr = feature['properties']['WADMPR']
     luas = feature['properties']['luas']
     coordinates = feature['geometry']['coordinates']
-    
     template = {
         'type' : 'Polygon',
         'geometry' : {
-            'type' : 'Polygon',
+            'type' : 'MultiPolygon',
             'coordinates' : coordinates
         }
     }
